@@ -528,6 +528,6 @@ if (PHP_SAPI=='cli')
             break;
     }        
 
-    $response = Edigear::getInstance()->setSecretKey("D38D5D58-572B-49EC-BAB5-63B6081A55E6")->send($request);
+    $response = Edigear::getInstance()->setSecretKey("SECRET-KEY")->send($request);
     var_dump($response);
 }
