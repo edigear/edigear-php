@@ -1,8 +1,12 @@
 <?php
 
 namespace Berysoft;
-include_once 'abstracts.php';
-include_once 'Request.php';
+
+include_once __DIR__ . '/Action.php';
+include_once __DIR__ . '/Channel.php';
+include_once __DIR__ . '/Method.php';
+include_once __DIR__ . '/Platform.php';
+include_once __DIR__ . '/Request.php';
 
 
 class Edigear
@@ -33,6 +37,12 @@ class Edigear
         return Edigear::$instance;
     }
                
+    public static function createRequest() : EdigearRequest
+    //public function createRequest() : EdigearRequest
+    {
+        return EdigearRequest::Create();
+    }
+    
     
     public function setSecretKey(string $secret)
     {

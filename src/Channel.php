@@ -1,5 +1,8 @@
 <?php
 
+namespace Berysoft;
+
+
 abstract class EGChannel
 {
     const Undefined = 0;
@@ -21,29 +24,4 @@ abstract class EGChannel
         
         return TRUE;
     }
-}
-
-
-abstract class EGAction
-{
-    const Request   = 1;
-    const Verify    = 2;
-    const Status    = 3;
-}
-
-
-abstract class EGPlatform
-{
-    const Undefined = 0;
-    const IOS       = 1;
-    const Android   = 2;
-    const Website   = 3;
-    const Desktop   = 4;
-}
-
-
-abstract class EGMethod
-{
-    const GET       = "GET";
-    const POST      = "POST";
 }

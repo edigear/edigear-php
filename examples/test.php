@@ -1,13 +1,15 @@
 <?php
 
 error_reporting(E_ALL | E_STRICT);
-require dirname(__DIR__) . '/vendor/autoload.php';
+//require __DIR__ . '/vendor/autoload.php';
 
+require dirname(__DIR__).'/src/Client.php';
 
 use Berysoft\Edigear;
+use Berysoft\EGAction;
 
 // Set channel to test
-$channel = "cli"; /* check, cli, rvc, sms*/
+$channel = "sms"; /* check, cli, rvc, sms*/
 $verification_request_id = "SMS-b35893ee-204a-4687-9c4b-d487c2cf443f";
 
 if (PHP_SAPI=='cli')
@@ -20,7 +22,7 @@ if (PHP_SAPI=='cli')
             switch ($test) 
             {
                 case "s":
-                    $request = EdigearRequest::Create()->setAction(EGAction::Status)->setId($verification_request_id);
+                    $request = Edigear::createRequest()->setAction(EGAction::Status)->setId($verification_request_id);
                     break;
                 case "v":
                     $request = EdigearRequest::Create()->setAction(EGAction::Verify)->setId($verification_request_id)->setPin("2022");

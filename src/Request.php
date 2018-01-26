@@ -1,6 +1,10 @@
 <?php
 namespace Berysoft;
 
+include_once __DIR__ . '/Action.php';
+include_once __DIR__ . '/Channel.php';
+include_once __DIR__ . '/Method.php';
+include_once __DIR__ . '/Platform.php';
 
 class EdigearRequest 
 {
