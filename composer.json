@@ -3,7 +3,7 @@
     "description": "PHP Client for using Edigear's restfull API.",
     "keywords": ["edigear", "verification", "voice mobile", "sms", "api"],
     "homepage": "https://github.com/edigear/edigear-php",
-    "license": "",
+    "license": "MIT",
     "type": "library",
     "authors": [
         {
