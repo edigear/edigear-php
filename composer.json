@@ -1,0 +1,26 @@
+{
+    "name": "deps/edigear-php",
+    "description": "PHP Client for using Edigear's restfull API.",
+    "keywords": ["edigear", "verification", "voice mobile", "sms", "api"],
+    "homepage": "https://github.com/edigear/edigear-php",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Robert Lakis",
+            "email": "rlakis@berysoft.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/edigear/edigear-php/issues",
+        "source": "https://github.com/edigear/edigear-php"
+    },
+    "autoload": {
+        "classmap": ["src/"],
+        "exclude-from-classmap": []
+    },
+    "require": {
+        "php": ">=7.0"
+    },
+    "require-dev": {}
+}
