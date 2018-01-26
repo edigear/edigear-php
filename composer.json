@@ -1,5 +1,5 @@
 {
-    "name": "Edigear/client-sdk",    
+    "name": "edigear/client-sdk",    
     "description": "PHP Client for using Edigear's restful API.",
     "keywords": ["edigear", "verification", "voice mobile", "sms", "api"],
     "homepage": "https://github.com/edigear/edigear-php",
