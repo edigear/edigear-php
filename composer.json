@@ -1,5 +1,5 @@
 {
-    "name": "deps/edigear-php",
+    "name": "Edigear/client-sdk",
     "description": "PHP Client for using Edigear's restfull API.",
     "keywords": ["edigear", "verification", "voice mobile", "sms", "api"],
     "homepage": "https://github.com/edigear/edigear-php",
@@ -24,6 +24,5 @@
     },
     "require": {
         "php": ">=7.0"
-    },
-    "require-dev": {}
+    }
 }
