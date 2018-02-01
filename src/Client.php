@@ -2,6 +2,7 @@
 
 namespace Berysoft;
 
+
 include_once __DIR__ . '/Action.php';
 include_once __DIR__ . '/Channel.php';
 include_once __DIR__ . '/Method.php';
@@ -44,6 +45,59 @@ class Edigear
     }
     
     
+    public static function createTextRequest(int $platform=EGPlatform::Website) : EdigearRequest
+    {
+        return Edigear::createRequest()->
+                    setAction(EGAction::Request)->
+                    setChannel(EGChannel::TextMessage)->
+                    setPlatform($platform);
+    }
+    
+    
+    public static function createOutboundCallRequest(int $platform=EGPlatform::Website) : EdigearRequest
+    {
+        return Edigear::createRequest()->
+                    setAction(EGAction::Request)->
+                    setChannel(EGChannel::Outbound)->
+                    setPlatform($platform);
+    }
+
+    
+    public static function createInboundCallRequest(int $platform=EGPlatform::Website) : EdigearRequest
+    {
+        return Edigear::createRequest()->
+                    setAction(EGAction::Request)->
+                    setChannel(EGChannel::Inbound)->
+                    setPlatform($platform);
+    }
+
+    
+    public static function createSMSRequest(int $platform=EGPlatform::Website) : EdigearRequest
+    {
+        return Edigear::createRequest()->
+                    setAction(EGAction::Request)->
+                    setChannel(EGChannel::Message)->
+                    setPlatform($platform);
+    }
+
+    
+    public static function createVerifyRequest(string $id="", int $pin=0) : EdigearRequest
+    {
+        return Edigear::createRequest()->
+                    setAction(EGAction::Verify)->                   
+                    setId($id)->
+                    setPin($pin);        
+    }
+    
+    
+    public static function createStatusRequest(string $id="") : EdigearRequest
+    {
+        return Edigear::createRequest()->
+                    setAction(EGAction::Status)->                   
+                    setId($id);
+    }
+
+    
     public function setSecretKey(string $secret)
     {
         $this->secretKey = $secret;
@@ -76,7 +130,7 @@ class Edigear
         
         if ($this->userAgent==NULL)
         {
-            $this->userAgent = 'Edigear-PHP/' . self::VERSION . ' (+https://github.com/berysoft/edigear-php)';
+            $this->userAgent = 'Edigear-PHP/' . self::VERSION . ' (+https://github.com/edigear/edigear-php)';
             $this->userAgent .= ' PHP/' . PHP_VERSION;
             $curl_version = curl_version();
             $this->userAgent .= ' curl/' . $curl_version['version'];
@@ -108,6 +162,7 @@ class Edigear
                     $jsonPayload = $request->getPayload();
                     //error_log($jsonPayload);
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonPayload);
+                    array_push($headers, "Accept: application/json");
                     array_push($headers, "Content-Type: application/json");
                     array_push($headers, 'Content-Length: '.strlen($jsonPayload));
                     break;
@@ -170,9 +225,6 @@ class EGResponse
 }
 
 
-
-
-
 trait ShortMessageService 
 {
     abstract function setId(string $id);
@@ -190,9 +242,10 @@ trait ShortMessageService
                         'platform' => $this->platform
                     ];
             echo json_encode($prepare), "\n";
-        }        
+        }
     }
 }
+
 
 
 class EdigearError extends \Exception

@@ -19,7 +19,12 @@ class EdigearRequest
     private function __construct() 
     {
         $this->method = EGMethod::POST;
-        $this->payload = ['number'=>0, 'id'=>'', 'pin'=>'', 'channel'=>EGChannel::Undefined, 'platform'=>EGPlatform::Undefined];
+        $this->payload = [
+                            'number'=>0, 
+                            'id'=>'', 
+                            'pin'=>'', 
+                            'channel'=>EGChannel::Undefined, 
+                            'platform'=>EGPlatform::Undefined];
     }
     
     
@@ -36,7 +41,12 @@ class EdigearRequest
         switch ($this->action) 
         {
             case EGAction::Request:
-                $url.='/validation/request';
+                if ($this->payload['channel']== EGChannel::TextMessage)
+                {
+                    $url.='/sms/send';
+                } else {
+                    $url.='/validation/request';
+                }
                 break;
             
             case EGAction::Verify:
@@ -53,7 +63,7 @@ class EdigearRequest
                
         return $url;
     }
-    
+       
     
     public function setChannel(int $channel) : EdigearRequest
     {
@@ -66,6 +76,7 @@ class EdigearRequest
     {
         $this->action = $action;
         
+       
         if ($this->action === EGAction::Request)
         {
             $this->setMethod(EGMethod::POST);
@@ -98,6 +109,36 @@ class EdigearRequest
         }
         return $this;
     }
+    
+    
+    public function setMessage(string $message) : EdigearRequest
+    {
+        if ($message)
+        {
+            $this->payload['text'] = $message;
+        }
+        else
+        {
+            unset($this->payload['text']);
+        }
+        return $this;
+    }
+    
+    
+    public function setLanguage(string $lang) : EdigearRequest
+    {
+        if ($lang)
+        {
+            $this->payload['language'] = $lang;
+        }
+        else
+        {
+            unset($this->payload['language']);
+        }
+        return $this;
+    }
+    
+    
     
     protected function setMethod(string $method) : EdigearRequest
     {
@@ -137,7 +178,21 @@ class EdigearRequest
         switch ($this->action) 
         {
             case EGAction::Request:
-                if ($this->payload['channel']==EGChannel::Message && isset($this->payload['sender']) && !empty($this->payload['sender']))
+                if ($this->payload['channel']== EGChannel::TextMessage)
+                {
+                    $payl = ['to'=>$this->payload['number'], 'channel'=>$this->payload['channel'], 'platform'=>$this->payload['platform']];
+                    if (isset($this->payload['sender']) && !empty($this->payload['sender']))
+                    {
+                        $payl['sender']=$this->payload['sender'];
+                    }
+                    if (isset($this->payload['language']) && !empty($this->payload['language']))
+                    {
+                        $payl['language']=$this->payload['language'];
+                    }
+                    $payl['text']=$this->payload['text'];
+                    return json_encode($payl);
+                }
+                else if ($this->payload['channel']==EGChannel::Message && isset($this->payload['sender']) && !empty($this->payload['sender']))
                 {
                     $payl = [
                         'number'=>$this->payload['number'], 
