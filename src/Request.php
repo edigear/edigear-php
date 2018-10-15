@@ -6,8 +6,7 @@ include_once __DIR__ . '/Channel.php';
 include_once __DIR__ . '/Method.php';
 include_once __DIR__ . '/Platform.php';
 
-class EdigearRequest 
-{
+class EdigearRequest {
     use ShortMessageService;
     
     protected $action;
@@ -16,11 +15,9 @@ class EdigearRequest
     
     private $error = null;
     
-    private function __construct() 
-    {
+    private function __construct() {
         $this->method = EGMethod::POST;
-        $this->payload = [
-                            'number'=>0, 
+        $this->payload = [  'number'=>0, 
                             'id'=>'', 
                             'pin'=>'', 
                             'channel'=>EGChannel::Undefined, 
@@ -28,23 +25,20 @@ class EdigearRequest
     }
     
     
-    public static function Create() : EdigearRequest
-    {
+    public static function Create() : EdigearRequest {
         $_instance = new EdigearRequest();
         return $_instance;
     }
 
     
-    public function getURL() : string
-    {
+    public function getURL() : string {
         $url = Edigear::GEAR_URL . '/' . Edigear::GEAR_VERSION;
-        switch ($this->action) 
-        {
+        switch ($this->action) {
             case EGAction::Request:
-                if ($this->payload['channel']== EGChannel::TextMessage)
-                {
+                if ($this->payload['channel']== EGChannel::TextMessage) {
                     $url.='/sms/send';
-                } else {
+                } 
+                else {
                     $url.='/validation/request';
                 }
                 break;
@@ -65,24 +59,19 @@ class EdigearRequest
     }
        
     
-    public function setChannel(int $channel) : EdigearRequest
-    {
+    public function setChannel(int $channel) : EdigearRequest {
         $this->payload['channel'] = $channel;        
         return $this;
     }
     
     
-    public function setAction(int $action) : EdigearRequest
-    {
+    public function setAction(int $action) : EdigearRequest {
         $this->action = $action;
-        
-       
-        if ($this->action === EGAction::Request)
-        {
+               
+        if ($this->action === EGAction::Request) {
             $this->setMethod(EGMethod::POST);
         }
-        else if ($this->action=== EGAction::Status)
-        {
+        else if ($this->action=== EGAction::Status) {
             $this->setMethod(EGMethod::GET);
         }
         
@@ -90,119 +79,119 @@ class EdigearRequest
     }
     
     
-    public function setPlatform(int $platform) : EdigearRequest
-    {
+    public function setPlatform(int $platform) : EdigearRequest {
         $this->payload['platform'] = $platform;
         return $this;
     }
 
     
-    public function setSender(string $sender) : EdigearRequest
-    {
-        if ($sender)
-        {
+    public function setSender(string $sender) : EdigearRequest {
+        if ($sender) {
             $this->payload['sender'] = $sender;
         }
-        else
-        {
+        else {
             unset($this->payload['sender']);
         }
         return $this;
     }
     
     
-    public function setMessage(string $message) : EdigearRequest
-    {
-        if ($message)
-        {
+    public function setMessage(string $message) : EdigearRequest {
+        if ($message) {
             $this->payload['text'] = $message;
         }
-        else
-        {
+        else {
             unset($this->payload['text']);
         }
         return $this;
     }
     
     
-    public function setLanguage(string $lang) : EdigearRequest
-    {
-        if ($lang)
-        {
+    public function setLanguage(string $lang) : EdigearRequest {
+        if ($lang) {
             $this->payload['language'] = $lang;
         }
-        else
-        {
+        else {
             unset($this->payload['language']);
         }
         return $this;
     }
     
-    
-    
-    protected function setMethod(string $method) : EdigearRequest
-    {
+        
+    protected function setMethod(string $method) : EdigearRequest {
         $this->method = $method;
         return $this;
     }
     
     
-    public function getMethod() : string
-    {
+    public function getMethod() : string {
         return $this->method;
     }
    
     
-    public function setPhoneNumber(int $phoneNumber) : EdigearRequest
-    {
+    public function setPhoneNumber(int $phoneNumber) : EdigearRequest {
         $this->payload['number'] = $phoneNumber;
+        return $this;                
+    }
+    
+    
+    public function setRefrence(int $reference) : EdigearRequest {
+        $this->payload['reference'] = $reference;
+        return $this;                
+    }
+    
+    
+    public function setUUID(int $uuid) : EdigearRequest {
+        $this->payload['uuid'] = $uuid;
         return $this;                
     }
        
     
-    public function setId(string $id) : EdigearRequest
-    {
+    public function setId(string $id) : EdigearRequest {
         $this->payload['id'] = $id;
         return $this;
     }
     
-    public function setPin(string $pin) : EdigearRequest
-    {
+    
+    public function setPin(string $pin) : EdigearRequest {
         $this->payload['pin'] = $pin;
         return $this;
     }
     
     
-    public function getPayload()
-    {
-        switch ($this->action) 
-        {
+    public function getPayload() {
+        switch ($this->action) {
             case EGAction::Request:
-                if ($this->payload['channel']== EGChannel::TextMessage)
-                {
+                if ($this->payload['channel']== EGChannel::TextMessage) {
                     $payl = ['to'=>$this->payload['number'], 'channel'=>$this->payload['channel'], 'platform'=>$this->payload['platform']];
-                    if (isset($this->payload['sender']) && !empty($this->payload['sender']))
-                    {
+                    if (isset($this->payload['sender']) && !empty($this->payload['sender'])) {
                         $payl['sender']=$this->payload['sender'];
                     }
-                    if (isset($this->payload['language']) && !empty($this->payload['language']))
-                    {
+                    if (isset($this->payload['language']) && !empty($this->payload['language'])) {
                         $payl['language']=$this->payload['language'];
                     }
                     $payl['text']=$this->payload['text'];
                     return json_encode($payl);
                 }
-                else if ($this->payload['channel']==EGChannel::Message && isset($this->payload['sender']) && !empty($this->payload['sender']))
-                {
+                else if ($this->payload['channel']==EGChannel::Message && isset($this->payload['sender']) && !empty($this->payload['sender'])) {
                     $payl = [
                         'number'=>$this->payload['number'], 
                         'channel'=>$this->payload['channel'], 
                         'platform'=>$this->payload['platform'], 
                         'sender'=> $this->payload['sender']];
-                    if (isset($this->payload['pin']) && $this->payload['pin'])
-                    {
+                    
+                    if (isset($this->payload['pin']) && $this->payload['pin']) {
                         $payl['code']=$this->payload['pin'];
                     }
+                    return json_encode($payl);
+                }
+                else if ($this->payload['channel']== EGChannel::RealTimePassword) {                    
+                    $payl = [
+                        'number'=>$this->payload['number'], 
+                        'channel'=>$this->payload['channel'], 
+                        'platform'=>$this->payload['platform'], 
+                        'uuid'=>$this->payload['uuid']??0,
+                        'reference'=>$this->payload['reference']??0];
                     return json_encode($payl);
                 }
                 return json_encode([
@@ -220,18 +209,14 @@ class EdigearRequest
     }
     
     
-    public function isValid() : bool
-    {
-        switch ($this->action) 
-        {
+    public function isValid() : bool {
+        switch ($this->action) {
             case EGAction::Request:
-                if ($this->payload['number']<99999)
-                {
+                if ($this->payload['number']<99999) {
                     return FALSE;
                 }
                 
-                if (($error = EGChannel::validate($this->payload))!==TRUE)
-                {
+                if (($error = EGChannel::validate($this->payload))!==TRUE) {
                     echo $error, "[",__LINE__, "]\n";
                     return FALSE;
                 }
@@ -244,8 +229,7 @@ class EdigearRequest
 //                    return FALSE;
 //                }
 //                
-                if ($this->payload['id']==null || empty($this->payload['id']))
-                {
+                if ($this->payload['id']==null || empty($this->payload['id'])) {
                     $this->error = "Invalid request id!";
                     return FALSE;
                 }
@@ -255,8 +239,7 @@ class EdigearRequest
                         (!isset($this->payload['pin']) ||
                         $this->payload['pin']==NULL || 
                         $this->payload['pin']<"0000" || 
-                        $this->payload['pin']>"9999"))
-                {
+                        $this->payload['pin']>"9999")) {
                     $this->error = "Invalid pin code!";
                     return FALSE;
                 }
@@ -264,8 +247,7 @@ class EdigearRequest
 
                 
             case EGAction::Status:
-                if (!isset($this->payload['id']) || $this->payload['id']==null || empty($this->payload['id']))
-                {
+                if (!isset($this->payload['id']) || $this->payload['id']==null || empty($this->payload['id'])) {
                     return FALSE;
                 }
                 break;
@@ -278,8 +260,7 @@ class EdigearRequest
     }
     
     
-    public function getLastError() : string
-    {
+    public function getLastError() : string {
         return $this->error ?? '';
     }
         

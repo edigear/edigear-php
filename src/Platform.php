@@ -1,8 +1,7 @@
 <?php
 namespace Berysoft;
 
-abstract class EGPlatform
-{
+abstract class EGPlatform {
     const Undefined = 0;
     const IOS       = 1;
     const Android   = 2;
