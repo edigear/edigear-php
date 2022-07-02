@@ -171,6 +171,9 @@ class EdigearRequest {
                         $payl['language']=$this->payload['language'];
                     }
                     $payl['text']=$this->payload['text'];
+                    if (($this->payload['uuid']??0)>0) {
+                        $payl['uuid']=$this->payload['uuid'];
+                    }
                     return json_encode($payl);
                 }
                 else if ($this->payload['channel']==EGChannel::Message && isset($this->payload['sender']) && !empty($this->payload['sender'])) {
@@ -182,6 +185,9 @@ class EdigearRequest {
                     
                     if (isset($this->payload['pin']) && $this->payload['pin']) {
                         $payl['code']=$this->payload['pin'];
+                    }
+                    if (($this->payload['uuid']??0)>0) {
+                        $payl['uuid']=$this->payload['uuid'];
                     }
                     return json_encode($payl);
                 }
@@ -197,10 +203,11 @@ class EdigearRequest {
                 return json_encode([
                         'number'=>$this->payload['number'], 
                         'channel'=>$this->payload['channel'], 
-                        'platform'=>$this->payload['platform']]);                
+                        'platform'=>$this->payload['platform'],
+                        'uuid'=>$this->payload['uuid']??0]);                
 
             case EGAction::Verify:
-                return json_encode(['id'=>$this->payload['id'], 'pin'=>$this->payload['pin']]);                
+                return json_encode(['id'=>$this->payload['id'], 'pin'=>$this->payload['pin'], 'uuid'=>$this->payload['uuid']??0]);                
 
             default:
                 break;
