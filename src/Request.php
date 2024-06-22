@@ -17,11 +17,31 @@ class EdigearRequest {
     
     private function __construct() {
         $this->method = EGMethod::POST;
-        $this->payload = [  'number'=>0, 
-                            'id'=>'', 
-                            'pin'=>'', 
-                            'channel'=>EGChannel::Undefined, 
-                            'platform'=>EGPlatform::Undefined];
+        
+        //whether ip is from the share internet  
+        if (isset($_SERVER['HTTP_CLIENT_IP']) && !empty($_SERVER['HTTP_CLIENT_IP'])) {  
+            $ip=$_SERVER['HTTP_CLIENT_IP'];  
+        }
+        //whether ip is from the proxy  
+        elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && !empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {  
+            $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];  
+        }
+        //whether ip is from the remote address  
+        elseif (isset($_SERVER['REMOTE_ADDR'])) {
+            $ip=$_SERVER['REMOTE_ADDR'];  
+        }
+        else {
+            $ip='127.0.0.1';
+        }
+        
+        $this->payload = [
+            'number'=>0, 
+            'id'=>'', 
+            'pin'=>'', 
+            'channel'=>EGChannel::Undefined, 
+            'platform'=>EGPlatform::Undefined,
+            'ip'=>$ip
+                ];
     }
     
     
