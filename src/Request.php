@@ -194,6 +194,7 @@ class EdigearRequest {
                     if (($this->payload['uuid']??0)>0) {
                         $payl['uuid']=$this->payload['uuid'];
                     }
+                    $payl['ip']=$this->payload['ip'];
                     return json_encode($payl);
                 }
                 else if ($this->payload['channel']==EGChannel::Message && isset($this->payload['sender']) && !empty($this->payload['sender'])) {
@@ -209,6 +210,7 @@ class EdigearRequest {
                     if (($this->payload['uuid']??0)>0) {
                         $payl['uuid']=$this->payload['uuid'];
                     }
+                    $payl['ip']=$this->payload['ip'];
                     return json_encode($payl);
                 }
                 else if ($this->payload['channel']== EGChannel::RealTimePassword) {                    
@@ -217,17 +219,19 @@ class EdigearRequest {
                         'channel'=>$this->payload['channel'], 
                         'platform'=>$this->payload['platform'], 
                         'uuid'=>$this->payload['uuid']??0,
-                        'reference'=>$this->payload['reference']??0];
+                        'reference'=>$this->payload['reference']??0,
+                        'ip'=>$this->payload['ip']];
                     return json_encode($payl);
                 }
                 return json_encode([
                         'number'=>$this->payload['number'], 
                         'channel'=>$this->payload['channel'], 
                         'platform'=>$this->payload['platform'],
-                        'uuid'=>$this->payload['uuid']??0]);                
+                        'uuid'=>$this->payload['uuid']??0,
+                        'ip'=>$this->payload['ip']]);                
 
             case EGAction::Verify:
-                return json_encode(['id'=>$this->payload['id'], 'pin'=>$this->payload['pin'], 'uuid'=>$this->payload['uuid']??0]);                
+                return json_encode(['id'=>$this->payload['id'], 'pin'=>$this->payload['pin'], 'uuid'=>$this->payload['uuid']??0, 'ip'=>$this->payload['ip']]);                
 
             default:
                 break;
